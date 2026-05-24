@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Palette Café — Where Every Bite is Art</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;1,300;1,600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #F5F0E8;
+      --warm-white: #FBF8F3;
+      --terracotta: #C4683A;
+      --terracotta-light: #D98A62;
+      --forest: #2D4A3E;
+      --forest-light: #3D6355;
+      --ink: #1A1A18;
+      --muted: #7A7268;
+      --gold: #C9A84C;
+      --blush: #E8C4A8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: transparent;
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(245,240,232,0.97);
+      box-shadow: 0 1px 24px rgba(26,26,24,0.08);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--forest);
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--terracotta); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--forest);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0; right: 0; height: 1.5px;
+      background: var(--terracotta);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .nav-links a:hover { color: var(--terracotta); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-cta {
+      background: var(--terracotta) !important;
+      color: white !important;
+      padding: 0.55rem 1.4rem;
+      border-radius: 2px;
+      letter-spacing: 0.06em !important;
+    }
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover { background: var(--forest) !important; color: white !important; }
+
+    /* ── HERO ── */
+    #home {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left {
+      background: var(--forest);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 5rem 6rem 6rem;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-left::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 5vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      color: var(--warm-white);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.35s forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--terracotta-light);
+    }
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      color: var(--blush);
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s forwards;
+    }
+    .hero-badges {
+      display: flex; gap: 0.7rem; flex-wrap: wrap;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.65s forwards;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--cream);
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 0.4rem 0.9rem;
+      border-radius: 2px;
+      letter-spacing: 0.04em;
+    }
+    .badge span { font-size: 1rem; }
+    .hero-btns {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+    .btn-primary {
+      background: var(--terracotta);
+      color: white;
+      padding: 0.85rem 2rem;
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--gold); transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent;
+      color: var(--cream);
+      padding: 0.85rem 2rem;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: border-color 0.25s, color 0.25s, transform 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+    .hero-right {
+      background: var(--blush);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 4rem 3rem;
+    }
+    .hero-art {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      opacity: 0;
+      animation: fadeIn 1.2s 0.6s forwards;
+    }
+    .palette-circles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .cuisine-card {
+      background: var(--warm-white);
+      border-radius: 4px;
+      padding: 1.8rem 1.4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(26,26,24,0.1);
+      transition: transform 0.3s;
+    }
+    .cuisine-card:hover { transform: translateY(-6px); }
+    .cuisine-card:nth-child(2) { margin-top: 2rem; background: var(--forest); color: white; }
+    .cuisine-card:nth-child(3) { margin-top: -2rem; }
+    .cuisine-card:nth-child(4) { background: var(--terracotta); color: white; }
+    .cuisine-card .c-icon { font-size: 2.5rem; margin-bottom: 0.6rem; display: block; }
+    .cuisine-card .c-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .cuisine-card .c-sub {
+      font-size: 0.75rem;
+      margin-top: 0.2rem;
+      opacity: 0.7;
+    }
+    .hero-veg-seal {
+      position: absolute;
+      bottom: 2rem; right: 2rem;
+      width: 70px; height: 70px;
+      background: var(--forest);
+      border-radius: 50%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-align: center;
+      animation: spin 20s linear infinite;
+    }
+    .hero-veg-seal .leaf { font-size: 1.4rem; }
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.5rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 1s 1.5s forwards;
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: var(--terracotta);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--warm-white);
+      padding: 8rem 6rem;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-main-block {
+      background: var(--forest);
+      border-radius: 4px;
+      padding: 3.5rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-main-block::before {
+      content: '"';
+      font-family: 'Playfair Display', serif;
+      font-size: 15rem;
+      color: rgba(255,255,255,0.05);
+      position: absolute;
+      top: -3rem; left: -1rem;
+      line-height: 1;
+    }
+    .about-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.5rem;
+      line-height: 1.6;
+      color: var(--blush);
+      margin-bottom: 1.5rem;
+      position: relative; z-index: 1;
+    }
+    .about-quote-attr {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      position: relative; z-index: 1;
+    }
+    .about-tag-block {
+      position: absolute;
+      bottom: -1.5rem; right: -1.5rem;
+      background: var(--terracotta);
+      color: white;
+      padding: 1.2rem 1.5rem;
+      border-radius: 4px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(196,104,58,0.35);
+    }
+    .about-tag-block .big-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .about-tag-block .small-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+    .section-tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--forest);
+      margin-bottom: 1.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--terracotta); }
+    .body-text {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+    .values-list {
+      list-style: none;
+      margin-top: 2rem;
+    }
+    .values-list li {
+      display: flex; gap: 1rem; align-items: flex-start;
+      margin-bottom: 1.2rem;
+    }
+    .v-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: var(--cream);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .v-text strong {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--forest);
+      margin-bottom: 0.2rem;
+    }
+    .v-text span { font-size: 0.84rem; color: var(--muted); }
+
+    /* ── MENU ── */
+    #menu {
+      background: var(--cream);
+      padding: 8rem 4rem;
+    }
+    .menu-header {
+      text-align: center;
+      max-width: 620px;
+      margin: 0 auto 4rem;
+    }
+    .menu-tabs {
+      display: flex; justify-content: center;
+      gap: 0; flex-wrap: wrap;
+      margin-bottom: 4rem;
+      border-bottom: 1.5px solid rgba(26,26,24,0.1);
+    }
+    .menu-tab {
+      background: transparent;
+      border: none;
+      border-bottom: 2.5px solid transparent;
+      margin-bottom: -1.5px;
+      padding: 0.8rem 1.8rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .menu-tab.active, .menu-tab:hover {
+      color: var(--terracotta);
+      border-bottom-color: var(--terracotta);
+    }
+    .menu-section { display: none; }
+    .menu-section.active { display: block; }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .menu-item {
+      background: var(--warm-white);
+      border-radius: 4px;
+      padding: 1.8rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(26,26,24,0.06);
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .menu-item:hover {
+      box-shadow: 0 12px 40px rgba(26,26,24,0.1);
+      transform: translateY(-3px);
+    }
+    .menu-item-accent {
+      position: absolute; top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--terracotta);
+    }
+    .item-cuisine-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+      margin-bottom: 0.8rem;
+      background: var(--cream);
+      color: var(--muted);
+    }
+    .item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--forest);
+      margin-bottom: 0.4rem;
+    }
+    .item-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .item-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--terracotta);
+    }
+    .item-veg-dot {
+      position: absolute;
+      top: 1.2rem; right: 1.2rem;
+      width: 14px; height: 14px;
+      border: 1.5px solid #228B22;
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .item-veg-dot::after {
+      content: '';
+      width: 7px; height: 7px;
+      background: #228B22;
+      border-radius: 50%;
+    }
+
+    /* ── PLACE ORDER ── */
+    #order {
+      background: var(--forest);
+      padding: 8rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    #order::before {
+      content: 'ORDER';
+      font-family: 'Playfair Display', serif;
+      font-size: 15vw;
+      font-weight: 900;
+      color: rgba(255,255,255,0.03);
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .order-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .order-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+    .order-header .section-tag { color: var(--gold); }
+    .order-header .section-title { color: var(--warm-white); }
+    .order-header .body-text { color: var(--blush); max-width: 480px; margin: 0 auto; }
+    .order-form {
+      background: var(--warm-white);
+      border-radius: 4px;
+      padding: 3rem;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.8rem 1rem;
+      border: 1.5px solid rgba(26,26,24,0.12);
+      border-radius: 2px;
+      background: var(--cream);
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--terracotta);
+    }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .order-items-section { margin-bottom: 1.5rem; }
+    .order-items-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--forest);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(26,26,24,0.1);
+    }
+    .quick-items {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .quick-item {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      border: 1.5px solid rgba(26,26,24,0.12);
+      border-radius: 2px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: var(--warm-white);
+      color: var(--ink);
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .quick-item.selected {
+      background: var(--forest);
+      color: white;
+      border-color: var(--forest);
+    }
+    .quick-item .q-count {
+      display: none;
+      background: var(--terracotta);
+      color: white;
+      font-size: 0.7rem;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    .quick-item.selected .q-count { display: flex; }
+    .order-summary-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--cream);
+      border-radius: 2px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    .order-total-text { font-size: 0.85rem; color: var(--muted); }
+    .order-total-text strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--forest);
+    }
+    .submit-btn {
+      width: 100%;
+      background: var(--terracotta);
+      color: white;
+      border: none;
+      padding: 1.05rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .submit-btn:hover { background: var(--forest); transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: var(--blush);
+      padding: 4rem 6rem 2.5rem;
+    }
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 3rem;
+      margin-bottom: 2rem;
+    }
+    .footer-brand .nav-logo { font-size: 1.8rem; }
+    .footer-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: rgba(232,196,168,0.6);
+      margin-top: 0.5rem;
+    }
+    .footer-col h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .footer-col p, .footer-col a {
+      font-size: 0.88rem;
+      color: rgba(232,196,168,0.65);
+      line-height: 2;
+      text-decoration: none;
+      display: block;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--blush); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-copy { font-size: 0.78rem; color: rgba(232,196,168,0.4); }
+    .veg-badge-footer {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.78rem;
+      color: #4CAF50;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+    .veg-badge-footer span { font-size: 1.1rem; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      background: var(--forest);
+      color: white;
+      padding: 1rem 1.6rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: 0 8px 32px rgba(26,26,24,0.2);
+      transform: translateY(120%);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 999;
+    }
+    .toast.show { transform: translateY(0); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+      #home { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 7rem 2.5rem 4rem; }
+      .hero-right { padding: 3rem 2rem 4rem; min-height: 50vw; }
+      #about { padding: 5rem 2.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 4rem; }
+      #menu { padding: 5rem 2rem; }
+      #order { padding: 5rem 2rem; }
+      .order-form { padding: 2rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      footer { padding: 3rem 2rem 2rem; }
+      .footer-top { gap: 2rem; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero-title { font-size: 2.8rem; }
+      .palette-circles { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="main-nav">
+  <a class="nav-logo" href="#home">Palette <span>Café</span></a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#order" class="nav-cta">Order Now</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="home">
+  <div class="hero-left">
+    <p class="hero-tag">🌿 100% Pure Vegetarian</p>
+    <h1 class="hero-title">Where Every<br/><em>Bite</em> is Art</h1>
+    <p class="hero-subtitle">A canvas of global flavours - Indian, Mexican, Italian & beyond - crafted fresh, served with love.</p>
+    <div class="hero-badges">
+      <div class="badge"><span>🇮🇳</span> Indian</div>
+      <div class="badge"><span>🌮</span> Mexican</div>
+      <div class="badge"><span>🍕</span> Italian</div>
+      <div class="badge"><span>🍜</span> Snacks</div>
+      <div class="badge"><span>🥤</span> Drinks</div>
+    </div>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-primary">Explore Menu</a>
+      <a href="#order" class="btn-outline">Place an Order</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-art">
+      <div class="palette-circles">
+        <div class="cuisine-card">
+          <span class="c-icon">🍛</span>
+          <div class="c-name">Indian</div>
+          <div class="c-sub">Dal, Sabzi & Naan</div>
+        </div>
+        <div class="cuisine-card">
+          <span class="c-icon">🌯</span>
+          <div class="c-name">Mexican</div>
+          <div class="c-sub">Burritos & Bowls</div>
+        </div>
+        <div class="cuisine-card">
+          <span class="c-icon">🍕</span>
+          <div class="c-name">Italian</div>
+          <div class="c-sub">Pizza & Pasta</div>
+        </div>
+        <div class="cuisine-card">
+          <span class="c-icon">☕</span>
+          <div class="c-name">Drinks</div>
+          <div class="c-sub">Mocktails & More</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-veg-seal">
+      <span class="leaf">🌱</span>
+      <span style="font-size:0.55rem; margin-top:0.2rem">Pure Veg</span>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-main-block">
+        <p class="about-quote">"Food is a painting — each ingredient a brushstroke. At Palette Café, we paint flavours from around the world, for everyone to taste."</p>
+        <p class="about-quote-attr">— The Palette Café Philosophy</p>
+      </div>
+      <div class="about-tag-block">
+        <div class="big-num">4+</div>
+        <div class="small-label">World<br/>Cuisines</div>
+      </div>
+    </div>
+    <div class="about-content reveal">
+      <p class="section-tag">Our Story</p>
+      <h2 class="section-title">A <em>Feast</em> for Every Palate</h2>
+      <p class="body-text">Palette Café was born from a simple belief: great food doesn't need meat. We wanted to prove that vegetarian cooking can be rich, bold, and endlessly exciting — across every culinary tradition.</p>
+      <p class="body-text">From buttery naan fresh off the tandoor to smoky burritos, wood-fired pizzas to velvety pasta, hearty Maggi bowls to hand-crafted mocktails — every dish is made with real ingredients and real care.</p>
+      <ul class="values-list">
+        <li>
+          <div class="v-icon">🌱</div>
+          <div class="v-text">
+            <strong>100% Vegetarian</strong>
+            <span>Every single item on our menu — guaranteed no meat, no compromise.</span>
+          </div>
+        </li>
+        <li>
+          <div class="v-icon">🍳</div>
+          <div class="v-text">
+            <strong>Made Fresh Daily</strong>
+            <span>We prep in small batches so your food is always at its peak.</span>
+          </div>
+        </li>
+        <li>
+          <div class="v-icon">🌍</div>
+          <div class="v-text">
+            <strong>Global Kitchen, Local Heart</strong>
+            <span>World cuisines prepared authentically with locally sourced produce.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── MENU ── -->
+<section id="menu">
+  <div class="menu-header reveal">
+    <p class="section-tag">What We Serve</p>
+    <h2 class="section-title">The <em>Palette</em> Menu</h2>
+    <p class="body-text">All dishes are 100% vegetarian. Choose a category below to explore our offerings.</p>
+  </div>
+
+  <div class="menu-tabs">
+    <button class="menu-tab active" data-tab="indian">🇮🇳 Indian</button>
+    <button class="menu-tab" data-tab="mexican">🌮 Mexican</button>
+    <button class="menu-tab" data-tab="italian">🍕 Italian</button>
+    <button class="menu-tab" data-tab="snacks">🍟 Snacks</button>
+    <button class="menu-tab" data-tab="drinks">🥤 Drinks</button>
+  </div>
+
+  <!-- INDIAN -->
+  <div class="menu-section active" id="tab-indian">
+    <div class="menu-grid">
+      <div class="menu-item">
+        <div class="menu-item-accent"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Indian</span>
+        <div class="item-name">Butter Naan + Dal Makhani</div>
+        <div class="item-desc">Pillowy soft tandoor naan served with creamy, slow-cooked black lentil dal.</div>
+        <div class="item-price">₹ 180</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Indian</span>
+        <div class="item-name">Paneer Butter Masala + Naan</div>
+        <div class="item-desc">Velvety tomato-cream curry with golden paneer cubes. A classic that never fails.</div>
+        <div class="item-price">₹ 220</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Indian</span>
+        <div class="item-name">Aloo Gobi Sabzi + Roti</div>
+        <div class="item-desc">Home-style potato and cauliflower stir-fry with warm rotis. Comfort in a bowl.</div>
+        <div class="item-price">₹ 150</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Indian</span>
+        <div class="item-name">Jeera Rice + Kadhi</div>
+        <div class="item-desc">Aromatic cumin rice paired with tangy, turmeric-laced yogurt kadhi.</div>
+        <div class="item-price">₹ 160</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Indian</span>
+        <div class="item-name">Stuffed Garlic Naan</div>
+        <div class="item-desc">Naan stuffed with herby garlic-butter filling, roasted on the tandoor.</div>
+        <div class="item-price">₹ 120</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Indian</span>
+        <div class="item-name">Palak Paneer Thali</div>
+        <div class="item-desc">Spinach curry with paneer, dal tadka, rice, roti, raita and pickle. Full meal deal.</div>
+        <div class="item-price">₹ 280</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEXICAN -->
+  <div class="menu-section" id="tab-mexican">
+    <div class="menu-grid">
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--gold)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Mexican</span>
+        <div class="item-name">Classic Veggie Burrito</div>
+        <div class="item-desc">Grilled tortilla stuffed with spiced rice, beans, corn salsa, jalapeños and sour cream.</div>
+        <div class="item-price">₹ 260</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--gold)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Mexican</span>
+        <div class="item-name">Mexican Rice Bowl</div>
+        <div class="item-desc">Chipotle-spiced rice base topped with black beans, pico de gallo, guacamole and cheese.</div>
+        <div class="item-price">₹ 240</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--gold)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Mexican</span>
+        <div class="item-name">Paneer Quesadilla</div>
+        <div class="item-desc">Crispy quesadilla filled with marinated paneer, peppers and melted cheese. Served with salsa.</div>
+        <div class="item-price">₹ 220</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--gold)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Mexican</span>
+        <div class="item-name">Street-Style Tacos (3 pcs)</div>
+        <div class="item-desc">Soft corn tacos with refried beans, grilled veggies, lime crema and hot sauce.</div>
+        <div class="item-price">₹ 200</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ITALIAN -->
+  <div class="menu-section" id="tab-italian">
+    <div class="menu-grid">
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:#C9A84C"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Italian</span>
+        <div class="item-name">Margherita Pizza</div>
+        <div class="item-desc">San Marzano tomato base, fresh mozzarella, basil and a drizzle of extra virgin olive oil.</div>
+        <div class="item-price">₹ 280</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:#C9A84C"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Italian</span>
+        <div class="item-name">Pesto Pasta</div>
+        <div class="item-desc">Al dente penne tossed in vibrant basil pesto with toasted pine nuts and parmesan.</div>
+        <div class="item-price">₹ 260</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:#C9A84C"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Italian</span>
+        <div class="item-name">Arrabbiata Pasta</div>
+        <div class="item-desc">Spicy tomato pasta with garlic, red chillies and a heavy hand of black pepper.</div>
+        <div class="item-price">₹ 240</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:#C9A84C"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Italian</span>
+        <div class="item-name">Loaded Veggie Pizza</div>
+        <div class="item-desc">Topped with bell peppers, mushrooms, olives, corn and three-cheese blend.</div>
+        <div class="item-price">₹ 320</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SNACKS -->
+  <div class="menu-section" id="tab-snacks">
+    <div class="menu-grid">
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--forest-light)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Snacks</span>
+        <div class="item-name">Loaded Nachos</div>
+        <div class="item-desc">Crispy tortilla chips loaded with melted cheese, jalapeños, guacamole, and salsa. Unmissable.</div>
+        <div class="item-price">₹ 220</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--forest-light)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Snacks</span>
+        <div class="item-name">Café-Style Maggi</div>
+        <div class="item-desc">Classic Maggi noodles elevated with butter, veggies, cheese and secret masala. The OG.</div>
+        <div class="item-price">₹ 120</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--forest-light)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Snacks</span>
+        <div class="item-name">Masala Fries</div>
+        <div class="item-desc">Crispy golden fries tossed in chaat masala, lime and coriander. Addictive.</div>
+        <div class="item-price">₹ 140</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--forest-light)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Snacks</span>
+        <div class="item-name">Paneer Tikka Skewers</div>
+        <div class="item-desc">Smoky marinated paneer with bell pepper and onion, chargrilled to perfection.</div>
+        <div class="item-price">₹ 200</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--forest-light)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Snacks</span>
+        <div class="item-name">Grilled Cheese Sandwich</div>
+        <div class="item-desc">Thick sourdough bread, three-cheese blend, tomato and herbs. Golden and gooey.</div>
+        <div class="item-price">₹ 160</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRINKS -->
+  <div class="menu-section" id="tab-drinks">
+    <div class="menu-grid">
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--terracotta-light)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Drinks</span>
+        <div class="item-name">Virgin Mojito</div>
+        <div class="item-desc">Fresh lime, mint, soda and sugar syrup over crushed ice. Cool and refreshing.</div>
+        <div class="item-price">₹ 120</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--terracotta-light)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Drinks</span>
+        <div class="item-name">Watermelon Lemonade</div>
+        <div class="item-desc">Freshly blended watermelon with lemon, mint and a hint of pink salt. Summer in a glass.</div>
+        <div class="item-price">₹ 130</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--terracotta-light)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Drinks</span>
+        <div class="item-name">Cold Coffee (Classic)</div>
+        <div class="item-desc">Strong espresso blended with chilled milk, ice and a dusting of cocoa. Rich and satisfying.</div>
+        <div class="item-price">₹ 140</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--terracotta-light)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Drinks</span>
+        <div class="item-name">Caramel Cold Coffee</div>
+        <div class="item-desc">Espresso, milk and salted caramel drizzle over ice. Sweet, bold and utterly indulgent.</div>
+        <div class="item-price">₹ 160</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--terracotta-light)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Drinks</span>
+        <div class="item-name">Blue Pea Lemonade</div>
+        <div class="item-desc">Butterfly pea flower tea with lemon — watch it change colour as you stir. Instagram-worthy!</div>
+        <div class="item-price">₹ 150</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-accent" style="background:var(--terracotta-light)"></div>
+        <div class="item-veg-dot"></div>
+        <span class="item-cuisine-tag">Drinks</span>
+        <div class="item-name">Masala Chai Latte</div>
+        <div class="item-desc">Aromatic spiced tea with steamed milk. Our take on the Indian classic — warm and spicy.</div>
+        <div class="item-price">₹ 100</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ORDER ── -->
+<section id="order">
+  <div class="order-inner">
+    <div class="order-header reveal">
+      <p class="section-tag">Dine In or Takeaway</p>
+      <h2 class="section-title">Place Your <em>Order</em></h2>
+      <p class="body-text">Fill out the form below and we'll have your order ready. We'll call to confirm within 10 minutes.</p>
+    </div>
+    <div class="order-form reveal">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="f-name" placeholder="Riya Sharma" />
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="f-phone" placeholder="+91 98765 43210" />
+        </div>
+        <div class="form-group">
+          <label>Order Type</label>
+          <select id="f-type">
+            <option value="">Select...</option>
+            <option>Dine In</option>
+            <option>Takeaway</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Time Preference</label>
+          <input type="time" id="f-time" />
+        </div>
+      </div>
+
+      <div class="order-items-section">
+        <div class="order-items-title">Quick Add Items (tap to select)</div>
+        <div class="quick-items" id="quick-items">
+          <div class="quick-item" data-price="180" data-name="Butter Naan + Dal">🍛 Butter Naan + Dal <div class="q-count">1</div></div>
+          <div class="quick-item" data-price="220" data-name="Paneer Butter Masala">🧀 Paneer Butter Masala <div class="q-count">1</div></div>
+          <div class="quick-item" data-price="260" data-name="Veggie Burrito">🌯 Veggie Burrito <div class="q-count">1</div></div>
+          <div class="quick-item" data-price="280" data-name="Margherita Pizza">🍕 Margherita Pizza <div class="q-count">1</div></div>
+          <div class="quick-item" data-price="220" data-name="Loaded Nachos">🧀 Loaded Nachos <div class="q-count">1</div></div>
+          <div class="quick-item" data-price="120" data-name="Café Maggi">🍜 Café Maggi <div class="q-count">1</div></div>
+          <div class="quick-item" data-price="140" data-name="Cold Coffee">☕ Cold Coffee <div class="q-count">1</div></div>
+          <div class="quick-item" data-price="120" data-name="Virgin Mojito">🍹 Virgin Mojito <div class="q-count">1</div></div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Additional Requests / Customisations</label>
+          <textarea id="f-notes" placeholder="E.g. extra spicy, no onion, cheese on the side..."></textarea>
+        </div>
+      </div>
+
+      <div class="order-summary-bar">
+        <div class="order-total-text">Estimated Total: <strong id="order-total">₹ 0</strong></div>
+        <div style="font-size:0.78rem; color:var(--muted)">Taxes included · Fresh made daily 🌱</div>
+      </div>
+
+      <button class="submit-btn" onclick="placeOrder()">🎨 Place My Order</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a class="nav-logo" href="#home">Palette <span>Café</span></a>
+      <p class="footer-tagline">Where every bite is a brushstroke.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="#home">Home</a>
+      <a href="#about">About Us</a>
+      <a href="#menu">Menu</a>
+      <a href="#order">Order Now</a>
+    </div>
+    <div class="footer-col">
+      <h4>Visit Us</h4>
+      <p>12, Palette Lane, Indiranagar</p>
+      <p>Bengaluru, Karnataka 560038</p>
+      <p style="margin-top:0.5rem">Open: 11am – 11pm daily</p>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p>📞 +91 98765 43210</p>
+      <p>✉️ hello@palettecafe.in</p>
+      <p>📸 @palettecafe.in</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Palette Café. All rights reserved.</p>
+    <div class="veg-badge-footer"><span>🌱</span> 100% Pure Vegetarian</div>
+  </div>
+</footer>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // NAV scroll effect
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // MENU TABS
+  document.querySelectorAll('.menu-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ORDER — quick items
+  let selectedItems = {};
+  const totalEl = document.getElementById('order-total');
+
+  document.querySelectorAll('.quick-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const name = item.dataset.name;
+      const price = parseInt(item.dataset.price);
+      if (item.classList.contains('selected')) {
+        item.classList.remove('selected');
+        delete selectedItems[name];
+      } else {
+        item.classList.add('selected');
+        selectedItems[name] = price;
+      }
+      const total = Object.values(selectedItems).reduce((a, b) => a + b, 0);
+      totalEl.textContent = '₹ ' + total;
+    });
+  });
+
+  // PLACE ORDER
+  function placeOrder() {
+    const name = document.getElementById('f-name').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const type = document.getElementById('f-type').value;
+    if (!name || !phone || !type) {
+      showToast('⚠️ Please fill in your name, phone, and order type.');
+      return;
+    }
+    if (Object.keys(selectedItems).length === 0) {
+      showToast('🍽️ Please select at least one item.');
+      return;
+    }
+    const items = Object.keys(selectedItems).join(', ');
+    showToast(`✅ Order placed, ${name}! We'll call you soon. Enjoy your ${items} 🎨`);
+    // Reset
+    document.querySelectorAll('.quick-item').forEach(i => i.classList.remove('selected'));
+    selectedItems = {};
+    totalEl.textContent = '₹ 0';
+    document.getElementById('f-name').value = '';
+    document.getElementById('f-phone').value = '';
+    document.getElementById('f-type').value = '';
+    document.getElementById('f-notes').value = '';
+  }
+
+  // TOAST
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4000);
+  }
+
+  // REVEAL on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
